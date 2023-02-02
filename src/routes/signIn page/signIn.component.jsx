@@ -1,4 +1,5 @@
 import { async } from "@firebase/util";
+import Button from "../../components/button/button.component";
 
 import {
   signInWithGooglePopup,
@@ -15,7 +16,11 @@ const SignIN = () => {
   return (
     <div>
       <h1>Sign In Page</h1>
-      <button onClick={logGooglePopupUser}> sign-in-with-popup </button>
+      <Button
+        children="Sign-in-with-popup"
+        buttonType="google"
+        onClick={logGooglePopupUser}
+      />
       <SignUpForm />
     </div>
   );

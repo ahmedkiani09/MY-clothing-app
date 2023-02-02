@@ -1,14 +1,20 @@
-const FormInput = (label, changeHandler, name, value, type) => {
+import "./form-input.styles.scss";
+
+const FormInput = ({ label, ...otherProps }) => {
   return (
-    <div>
-      <label> {label} </label>
-      <input
-        type={type}
-        required
-        onChange={changeHandler}
-        name={name}
-        value={value}
-      ></input>
+    <div className="group">
+      <input className="form-input" {...otherProps}></input>
+      {label && (
+        <label
+          className={`${
+            otherProps.value.length ? "shrink" : ""
+          } form-input-label`}
+        >
+          {label}
+        </label>
+      )}
     </div>
   );
 };
+
+export default FormInput;

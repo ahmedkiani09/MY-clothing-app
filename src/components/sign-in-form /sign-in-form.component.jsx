@@ -1,45 +1,53 @@
 import { useState } from "react";
-import { createAuthUserWithEmailAndPassword } from "../../utils/firebase/firebase.utils";
-import { createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
+import "./sign-in-form.style.scss";
+import {
+  signInAuthUserWithEmailAndPassword,
+  signInWithGooglePopup,
+  createUserDocumentFromAuth,
+} from "../../utils/firebase/firebase.utils";
 import FormInput from "../form-input /formInput.component";
-import "./sign-up-form.style.scss";
 import Button from "../button/button.component";
 
 const defaultFormFields = {
-  displayName: "",
   email: "",
   password: "",
-  confirmPassword: "",
 };
 
-const SignUpForm = () => {
+const SignInForm = () => {
   const [newFormFields, setNewFormFields] = useState(defaultFormFields);
-  const { displayName, email, password, confirmPassword } = newFormFields;
+  const { email, password } = newFormFields;
 
   const clearInputFields = () => setNewFormFields(defaultFormFields);
 
+  const SignInWithGoogle = async () => {
+    const { user } = await signInWithGooglePopup();
+    await createUserDocumentFromAuth(user);
+  };
+
   const submitFunction = async (event) => {
     event.preventDefault();
-    if (password !== confirmPassword) return alert("passwords does not match");
+
     try {
-      const { user } = await createAuthUserWithEmailAndPassword(
+      const response = await signInAuthUserWithEmailAndPassword(
         email,
         password
       );
-      await createUserDocumentFromAuth(user, { displayName });
+      console.log(response);
 
       clearInputFields();
     } catch (error) {
-      console.error("Error while signing up:", error);
       switch (error.code) {
-        case "auth/email-already-in-use":
-          alert("Email already in use. Please choose another one.");
+        case "auth/wrong-password":
+          alert("Wrong password. Please try again.");
+          break;
+        case "auth/user-not-found":
+          alert("User not found. Please check your email and try again.");
           break;
         case "auth/invalid-email":
-          alert("Invalid email address. Please enter a valid email.");
+          alert("Invalid email. Please check the format and try again.");
           break;
         default:
-          alert("An error occured while signing up. Please try again later.");
+          alert("An error occurred. Please try again later.");
           break;
       }
     }
@@ -51,19 +59,10 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className="sign-up-container">
-      <h2> Don't have an account? </h2>
-      <span> Sign up with your email and password </span>
+    <div className="sign-in-container">
+      <h2> Already have an account? </h2>
+      <span> sign in with email and password </span>
       <form onSubmit={submitFunction}>
-        <FormInput
-          label="Display Name"
-          type="text"
-          required
-          onChange={handleChange}
-          name="displayName" // * this name is used here to change the state using useState hook so there must be same property name as in the initial state object
-          value={displayName} // * this is the new value to which the property is being updated.
-        />
-
         <FormInput
           label="Email"
           type="email"
@@ -82,23 +81,18 @@ const SignUpForm = () => {
           value={password}
           s
         />
-
-        <FormInput
-          label="Confirm Password"
-          type="password"
-          required
-          onChange={handleChange}
-          name="confirmPassword"
-          value={confirmPassword}
-        />
-
-        <Button children="sign-up" type="submit" />
+        <div className="buttons-container">
+          <Button type="submit"> Sign-in </Button>
+          <Button type="button" buttonType="google" onClick={SignInWithGoogle}>
+            Google Sign-In
+          </Button>
+        </div>
       </form>
     </div>
   );
 };
 
-export default SignUpForm;
+export default SignInForm;
 
 /* spread Operator special case:
 const ahmed = {

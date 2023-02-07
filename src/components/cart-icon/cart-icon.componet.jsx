@@ -9,7 +9,7 @@ const CartIcon = () => {
 
   const toggleCart = () => setIsCartOpen(!isCartOpen);
 
-  const quantity = () => {
+  const calcCount = () => {
     let totalQuantity = 0;
     cartItemsArray.forEach((cartItem) => (totalQuantity += cartItem.quantity));
     return totalQuantity;
@@ -18,7 +18,7 @@ const CartIcon = () => {
   return (
     <div className="cart-icon-container" onClick={toggleCart}>
       <ShoppingIcon className="shopping-icon" />
-      <span className="item-count">{quantity()}</span>
+      <span className="item-count">{calcCount()}</span>
     </div>
   );
 };

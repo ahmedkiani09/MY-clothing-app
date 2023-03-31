@@ -45,7 +45,7 @@ const clearItemsFromCartArrayHelper = (cartItemsArray, cartItemToClear) => {
 };
 
 export const CartDropdownContext = createContext({
-  isCartOpen: false,
+  isCartOpen: true,
   setIsCartOpen: () => {},
   cartItemsArray: [],
   addItemsToCartArray: () => {},
@@ -59,13 +59,15 @@ const INITIAL_STATE = {
   cartItemsArray: [],
 };
 
+// ! Action Cases:
 const ACTION_CASES = {
   SET_IS_CART_OPEN: "SET_IS_CART_OPEN",
   SET_CART_ITEMS: "SET_CART_ITEMS",
 };
 
-// ! cart Reducer function:
+// ! Cart Reducer function:
 const cartReducer = (state, action) => {
+  // ! Reducers only store readable values meaning no functions and other similar types can be included in the reducers.
   const { type, payLoad } = action;
 
   switch (type) {
@@ -75,7 +77,7 @@ const cartReducer = (state, action) => {
         payLoad,
       };
 
-    case ACTION_CASES.IS_CART_OPEN:
+    case ACTION_CASES.SET_IS_CART_OPEN:
       return {
         ...state,
         isCartOpen: payLoad,
@@ -92,7 +94,7 @@ export const CartDropdownProvider = ({ children }) => {
 
   const addItemsToCartArray = (productToAdd) => {
     const newCartItems = addItemToCartArrayHelper(cartItemsArray, productToAdd);
-    updateCartItemsReducer(newCartItems);
+    return updateCartItemsReducer(newCartItems);
   };
 
   const removeItemsFromCartArray = (cartItemToRemove) => {
@@ -100,7 +102,7 @@ export const CartDropdownProvider = ({ children }) => {
       cartItemsArray,
       cartItemToRemove
     );
-    updateCartItemsReducer(newCartItems);
+    return updateCartItemsReducer(newCartItems);
   };
 
   const clearItemsFromCartArray = (cartItemToClear) => {
@@ -108,19 +110,19 @@ export const CartDropdownProvider = ({ children }) => {
       cartItemsArray,
       cartItemToClear
     );
-    updateCartItemsReducer(newCartItems);
+    return updateCartItemsReducer(newCartItems);
   };
 
   // ! update cart item reducer functions:
   const updateCartItemsReducer = (newCartItems) => {
-    dispatch({
+    return dispatch({
       type: ACTION_CASES.SET_CART_ITEMS,
       payload: { cartItemsArray: newCartItems },
     });
   };
 
   const setIsCartOpen = (boolean) => {
-    dispatch({ type: ACTION_CASES.SET_IS_CART_OPEN, payload: boolean });
+    return dispatch({ type: ACTION_CASES.SET_IS_CART_OPEN, payload: boolean });
   };
 
   const value = {

@@ -1,20 +1,17 @@
-export const USER_ACTION_TYPES = {
-  SET_CURRENT_USER: "SET_CURRENT_USER",
-};
+import { USER_ACTION_TYPES } from "./user.types";
 
 // INITIAL STATE:
 const INITIAL_STATE = {
   currentUser: null,
+  User: "firstName",
 };
 
 // REDUCER FUNCTION:
 export const userReducer = (state = INITIAL_STATE, action) => {
-  console.log("dispatched");
-  console.log(action);
   const { type, payload } = action;
 
-  switch (USER_ACTION_TYPES.SET_CURRENT_USER) {
-    case "SET_CURRENT_USER": {
+  switch (type) {
+    case USER_ACTION_TYPES.SET_CURRENT_USER: {
       return {
         ...state,
         currentUser: payload,
@@ -22,7 +19,7 @@ export const userReducer = (state = INITIAL_STATE, action) => {
     }
 
     default: {
-      throw new Error("Unhandled action type:" + type);
+      return state;
     }
   }
 };

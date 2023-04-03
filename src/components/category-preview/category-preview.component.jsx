@@ -1,6 +1,10 @@
 import "./category-preview.styles.scss";
-import ProductCard from "../product-card/product-card.component";
+
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import { selectCategoriesMap } from "../../store/categories/categories-selector";
+import ProductCard from "../product-card/product-card.component";
 
 const CategoryPreview = ({ title, products }) => {
   return (

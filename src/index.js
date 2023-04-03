@@ -8,7 +8,6 @@ import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 
-import { CategoriesProvider } from "./context/categories.context";
 import { CartDropdownProvider } from "./context/cart-dropdown.context";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -16,11 +15,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <CategoriesProvider>
-          <CartDropdownProvider>
-            <App />
-          </CartDropdownProvider>
-        </CategoriesProvider>
+        <CartDropdownProvider>
+          <App />
+        </CartDropdownProvider>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>

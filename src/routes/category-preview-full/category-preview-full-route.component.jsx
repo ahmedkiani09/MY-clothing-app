@@ -1,17 +1,23 @@
 import { async } from "@firebase/util";
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
+import { useSelector } from "react-redux";
+
 import ProductCard from "../../components/product-card/product-card.component";
-import { CategoriesContext } from "../../context/categories.context";
+
+import { selectCategoriesMap } from "../../store/categories/categories-selector";
 
 import "./category-preview-full-route.style.scss";
 
 const CategoryPreviewFullRoute = () => {
   const { category } = useParams();
-  const { categoriesMap } = useContext(CategoriesContext);
+  console.log("render/re-rendering of the category preview");
+  const categoriesMap = useSelector(selectCategoriesMap);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
+    console.log("Effect fired setting products or calling setProducts");
     setProducts(categoriesMap[category]);
   }, [categoriesMap, category]);
 

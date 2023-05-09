@@ -1,15 +1,12 @@
 import "./checkout.styles.scss";
+import { useSelector, useDispatch } from "react-redux";
+
+import { selectCartItems } from "../../store/cart/cart-selector.js";
+
 import CheckoutCard from "../../components/checkout-card/checkout-card.component";
-import { useContext } from "react";
-import { CartDropdownContext } from "../../context/cart-dropdown.context";
 
 const Checkout = () => {
-  const {
-    cartItemsArray,
-    addItemsToCartArray,
-    removeItemsFromCartArray,
-    clearItemsFromCartArray,
-  } = useContext(CartDropdownContext);
+  const cartItemsArray = useSelector(selectCartItems);
 
   const calcTotal = () => {
     let total = 0;
@@ -40,15 +37,7 @@ const Checkout = () => {
       </div>
 
       {cartItemsArray.map((cartItem) => {
-        return (
-          <CheckoutCard
-            key={cartItem.id}
-            checkoutItem={cartItem}
-            quantityIncreaseHandler={addItemsToCartArray}
-            quantityDecreaseHandler={removeItemsFromCartArray}
-            productRemoverHandler={clearItemsFromCartArray}
-          />
-        );
+        return <CheckoutCard key={cartItem.id} checkoutItem={cartItem} />;
       })}
       <span className="total"> Total: ${calcTotal()}</span>
     </div>

@@ -12,12 +12,12 @@ import "./category-preview-full-route.style.scss";
 
 const CategoryPreviewFullRoute = () => {
   const { category } = useParams();
-  console.log("render/re-rendering of the category preview");
+  // console.log("render/re-rendering of the category preview");
   const categoriesMap = useSelector(selectCategoriesMap);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    console.log("Effect fired setting products or calling setProducts");
+    // console.log("Effect fired setting products or calling setProducts");
     setProducts(categoriesMap[category]);
   }, [categoriesMap, category]);
 

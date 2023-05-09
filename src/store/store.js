@@ -4,6 +4,9 @@ import {
   legacy_createStore as createStore,
 } from "redux";
 
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+
 // import { logger } from "redux-logger";
 
 import { rootReducer } from "./root-reducer";
@@ -22,12 +25,26 @@ const loggerMiddlware = (store) => (next) => (action) => {
   console.log("next state", store.getState());
 };
 
+const persistConfig = {
+  key: "root",
+  storage,
+  blacklist: ["user"],
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 const middleWares = [loggerMiddlware];
 
 const composedEnhancers = compose(applyMiddleware(...middleWares));
 
 //  The second argument is the additional default state. (which now is undefined)
-export const store = createStore(rootReducer, undefined, composedEnhancers);
+export const store = createStore(
+  persistedReducer,
+  undefined,
+  composedEnhancers
+);
+
+export const persister = persistStore(store);
 
 // ! currying concept (function calling other functions)
 // const curryFunc = (a) => (b, c) => (d, e) => console.log(a + b - (c * d) / e);

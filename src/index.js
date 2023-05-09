@@ -6,19 +6,18 @@ import "./index.scss";
 import reportWebVitals from "./reportWebVitals";
 
 import { Provider } from "react-redux";
-import { store } from "./store/store";
-
-import { CartDropdownProvider } from "./context/cart-dropdown.context";
+import { store, persister } from "./store/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <CartDropdownProvider>
+      <PersistGate loading={null} persistor={persister}>
+        <BrowserRouter>
           <App />
-        </CartDropdownProvider>
-      </BrowserRouter>
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );

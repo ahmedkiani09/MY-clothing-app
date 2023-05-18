@@ -30,6 +30,11 @@ export const selectCategoriesMap = createSelector(
   }
 );
 
+export const selectCategoriesIsLoading = createSelector(
+  [selectCategories],
+  (categories) => categories.isLoading
+);
+
 // ? chatGpt's explanation:
 // The code is implementing Redux, which is a state management library for JavaScript applications.
 

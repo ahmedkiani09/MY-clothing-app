@@ -4,38 +4,39 @@ import {
   legacy_createStore as createStore,
 } from "redux";
 
+import { logger } from "redux-logger";
+
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-// import { logger } from "redux-logger";
+// import thunk from "redux-thunk";
+import createSagaMiddleware from "redux-saga";
+import { rootSaga } from "./root-saga";
 
 import { rootReducer } from "./root-reducer";
-
-const loggerMiddlware = (store) => (next) => (action) => {
-  if (!action.type) {
-    return next(action);
-  }
-
-  console.log("type", action.type);
-  console.log("Payload", action.payload);
-  console.log("state", store.getState());
-
-  next(action);
-
-  console.log("next state", store.getState());
-};
 
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: ["user"],
+  whitelist: ["cart"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const middleWares = [loggerMiddlware];
+const sagaMiddleware = createSagaMiddleware();
 
-const composedEnhancers = compose(applyMiddleware(...middleWares));
+const middleWares = [
+  process.env.NODE_ENV !== "production" && logger,
+  sagaMiddleware,
+].filter(Boolean);
+
+const composeEnhancer =
+  (process.env.NODE_ENV !== "production" &&
+    window &&
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+  compose;
+
+const composedEnhancers = composeEnhancer(applyMiddleware(...middleWares));
 
 //  The second argument is the additional default state. (which now is undefined)
 export const store = createStore(
@@ -44,9 +45,12 @@ export const store = createStore(
   composedEnhancers
 );
 
+//? Useful Info: this is unique to redux saga middleware and it is done here after the store is instantiated and it includes saga middleWare in it.
+sagaMiddleware.run(rootSaga);
+
 export const persister = persistStore(store);
 
-// ! currying concept (function calling other functions)
+// ! Important concept: currying concept (function calling other functions)
 // const curryFunc = (a) => (b, c) => (d, e) => console.log(a + b - (c * d) / e);
 
 // const with3 = curryFunc(2);

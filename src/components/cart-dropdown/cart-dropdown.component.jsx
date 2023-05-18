@@ -13,7 +13,7 @@ import {
 import { useSelector } from "react-redux";
 
 const CartDropdown = () => {
-  const { cartItemsArray } = useSelector(selectCartItems);
+  const cartItemsArray = useSelector(selectCartItems);
 
   const navigate = useNavigate();
   const goToCheckoutHandler = () => navigate("/checkout");

@@ -12,11 +12,12 @@ import { setIsCartOpen } from "../../store/cart/cart-actions";
 const CartIcon = () => {
   const dispatch = useDispatch();
   const isCartOpen = useSelector(selectIsCartOpen);
+
   const cartItemsArray = useSelector(selectCartItems);
 
-  // const isCartOpen = useSelector(se)
-
-  const toggleCart = () => dispatch(setIsCartOpen(!isCartOpen));
+  const toggleCart = () => {
+    dispatch(setIsCartOpen(!isCartOpen));
+  };
 
   const calcCount = () => {
     let totalQuantity = 0;

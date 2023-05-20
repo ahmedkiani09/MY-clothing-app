@@ -2,7 +2,7 @@ import { CATEGORIES_ACTION_TYPES } from "./categories-types";
 
 export const CATEGORIES_INITIAL_STATE = {
   categoriesArray: [],
-  isLoading: true,
+  isLoading: false,
   error: null,
 };
 

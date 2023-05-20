@@ -36,7 +36,9 @@ const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
   prompt: "select_account",
 });
+
 export const auth = getAuth();
+
 export const signInWithGooglePopup = () =>
   signInWithPopup(auth, googleProvider);
 
@@ -55,7 +57,6 @@ export const addCollectionsAndDocuments = async (
     batch.set(docRef, object);
   });
   await batch.commit();
-  console.log("done");
 };
 
 export const getCollectionsAndDocuments = async () => {
@@ -102,7 +103,7 @@ export const createUserDocumentFromAuth = async (
   }
 
   //  if userDocRef do exists:
-  return userDocRef;
+  return usersSnapshot;
 };
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
@@ -121,4 +122,17 @@ export const signOutUser = () => {
 
 export const ourAuthStateChangedListener = (callbackFn) => {
   onAuthStateChanged(auth, callbackFn);
+};
+
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (userAuth) => {
+        unsubscribe();
+        resolve(userAuth);
+      },
+      reject
+    );
+  });
 };

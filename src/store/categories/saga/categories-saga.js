@@ -1,12 +1,12 @@
 import { all, call, put, takeLatest } from "redux-saga/effects"; // side effects
 
-import { getCollectionsAndDocuments } from "../../utils/firebase/firebase.utils";
+import { getCollectionsAndDocuments } from "../../../utils/firebase/firebase.utils";
 
 import {
   fetchCategoriesSuccess,
   fetchCategoriesFailed,
-} from "./categories-action";
-import { CATEGORIES_ACTION_TYPES } from "./categories-types";
+} from "../categories-action";
+import { CATEGORIES_ACTION_TYPES } from "../categories-types";
 
 // ? sagas have redux bindings on them meaning we can access state, use dispatch etc within the generator functions. Redux Saga provides several built-in effects that allow you to interact with the Redux store and perform actions such as dispatching actions or accessing the current state.
 // generator functions:

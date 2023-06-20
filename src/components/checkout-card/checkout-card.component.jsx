@@ -1,10 +1,10 @@
 import "./checkout-card.style.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCartItems } from "../../store/cart/cart-selector.js";
+import { selectCartItems } from "../../store/cart/cart-selector";
 
-import { addItemsToCartArray } from "../../store/cart/cart-actions.js";
-import { removeItemsFromCartArray } from "../../store/cart/cart-actions.js";
-import { clearItemsFromCartArray } from "../../store/cart/cart-actions.js";
+import { addItemsToCartArray } from "../../store/cart/cart-actions";
+import { removeItemsFromCartArray } from "../../store/cart/cart-actions";
+import { clearItemsFromCartArray } from "../../store/cart/cart-actions";
 
 const CheckoutCard = ({ checkoutItem }) => {
   const dispatch = useDispatch();

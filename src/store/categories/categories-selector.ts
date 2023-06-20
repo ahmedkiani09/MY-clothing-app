@@ -33,7 +33,7 @@ export const selectCategoriesMap = createSelector(
 );
 
 export const selectCategoriesIsLoading = createSelector(
-  [selectCategories],
+  [selectCategoriesMap],
   (categories) => categories.isLoading
 );
 

@@ -7,6 +7,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  User,
+  NextOrObserver,
 } from "firebase/auth";
 import {
   getFirestore,
@@ -17,7 +19,10 @@ import {
   writeBatch,
   query,
   getDocs,
+  QueryDocumentSnapshot,
 } from "firebase/firestore";
+
+import { Category } from "../../store/categories/categories-types";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB63OhTwYieB5v5k9Hjm9JOcdne9gVQatE",
@@ -45,10 +50,14 @@ export const signInWithGooglePopup = () =>
 // 3. Firestore instance:
 export const db = getFirestore();
 
-export const addCollectionsAndDocuments = async (
-  collectionKey,
-  objectsToAdd
-) => {
+export type ObjectToAdd = {
+  title: string;
+};
+
+export const addCollectionsAndDocuments = async <T extends ObjectToAdd>(
+  collectionKey: string,
+  objectsToAdd: T[]
+): Promise<void> => {
   const collectionRef = collection(db, collectionKey);
   const batch = writeBatch(db);
 
@@ -59,19 +68,31 @@ export const addCollectionsAndDocuments = async (
   await batch.commit();
 };
 
-export const getCollectionsAndDocuments = async () => {
+export const getCategoriesAndDocuments = async (): Promise<Category[]> => {
   const collectionRef = collection(db, "categories");
   const q = query(collectionRef);
 
   const querySnapShot = await getDocs(q);
-  return querySnapShot.docs.map((docSnapshot) => docSnapshot.data());
+  return querySnapShot.docs.map((docSnapshot) =>
+    docSnapshot.data()
+  ) as Category[];
+};
+
+export type AdditionalInformation = {
+  displayName?: string;
+};
+
+export type UserData = {
+  crteatedAt: Date;
+  displayName: string;
+  emai: string;
 };
 
 // 4. User Documents in database:
 export const createUserDocumentFromAuth = async (
-  userAuth,
-  additionalInfo = {}
-) => {
+  userAuth: User,
+  additionalInfo = {} as AdditionalInformation
+): Promise<void | QueryDocumentSnapshot<UserData>> => {
   if (!userAuth) return;
   const userDocRef = doc(db, "users", userAuth.uid);
 
@@ -91,27 +112,26 @@ export const createUserDocumentFromAuth = async (
         ...additionalInfo,
       });
     } catch (err) {
-      if (err.code === "auth/email-already-in-use") {
-        alert("Can not create user, email already in use");
-      } else {
-        console.error(
-          "There was a problem creating the reference:",
-          err.message
-        );
-      }
+      console.log("error creating user", err);
     }
   }
 
   //  if userDocRef do exists:
-  return usersSnapshot;
+  return usersSnapshot as QueryDocumentSnapshot<UserData>;
 };
 
-export const createAuthUserWithEmailAndPassword = async (email, password) => {
+export const createAuthUserWithEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
   if (!email || !password) return;
   return await createUserWithEmailAndPassword(auth, email, password);
 };
 
-export const signInAuthUserWithEmailAndPassword = async (email, password) => {
+export const signInAuthUserWithEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
   if (!email || !password) return;
   return await signInWithEmailAndPassword(auth, email, password);
 };
@@ -120,11 +140,13 @@ export const signOutUser = () => {
   return signOut(auth);
 };
 
-export const ourAuthStateChangedListener = (callbackFn) => {
+export const ourAuthStateChangedListener = (
+  callbackFn: NextOrObserver<User>
+) => {
   onAuthStateChanged(auth, callbackFn);
 };
 
-export const getCurrentUser = () => {
+export const getCurrentUser = (): Promise<User | null> => {
   return new Promise((resolve, reject) => {
     const unsubscribe = onAuthStateChanged(
       auth,

@@ -1,6 +1,6 @@
 import { all, call, put, takeLatest } from "redux-saga/effects"; // side effects
 
-import { getCollectionsAndDocuments } from "../../../utils/firebase/firebase.utils";
+import { getCategoriesAndDocuments } from "../../../utils/firebase/firebase.utils";
 
 import {
   fetchCategoriesSuccess,
@@ -13,8 +13,8 @@ import { CATEGORIES_ACTION_TYPES } from "../categories-types";
 export const fetchCategoriesAsync = function* () {
   try {
     //? Useful info: anywhere you have function and you want to turn it into a effect we use call.
-    //! you can not pass the paramters as ordinary function but like this: getCollectionsAndDocuments, 'categories'.
-    const categoriesArray = yield call(getCollectionsAndDocuments); // similar to as await
+    //! you can not pass the paramters as ordinary function but like this: getCategoriesAndDocuments, 'categories'.
+    const categoriesArray = yield call(getCategoriesAndDocuments); // similar to as await
 
     yield put(fetchCategoriesSuccess(categoriesArray)); // similar to as dispatch
   } catch (error) {

@@ -1,4 +1,4 @@
-import { createAction } from "../../utils/reducer/reducer.utils";
+import { createAction, withMatcher } from "../../utils/reducer/reducer.utils";
 import { CART_ACTION_TYPES } from "./cart-types";
 
 const addItemToCartArrayHelper = (cartItemsArray, productToAdd) => {
@@ -45,27 +45,33 @@ const clearItemsFromCartArrayHelper = (cartItemsArray, cartItemToClear) => {
   );
 };
 
-export const setIsCartOpen = (boolean) => {
+export const setIsCartOpen = withMatcher((boolean) => {
   return createAction(CART_ACTION_TYPES.SET_IS_CART_OPEN, boolean);
-};
+});
 
-export const addItemsToCartArray = (cartItemsArray, productToAdd) => {
-  const newCartItems = addItemToCartArrayHelper(cartItemsArray, productToAdd);
-  return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
-};
+export const addItemsToCartArray = withMatcher(
+  (cartItemsArray, productToAdd) => {
+    const newCartItems = addItemToCartArrayHelper(cartItemsArray, productToAdd);
+    return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
+  }
+);
 
-export const removeItemsFromCartArray = (cartItemsArray, cartItemToRemove) => {
-  const newCartItems = removeItemFromCartArrayHelper(
-    cartItemsArray,
-    cartItemToRemove
-  );
-  return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
-};
+export const removeItemsFromCartArray = withMatcher(
+  (cartItemsArray, cartItemToRemove) => {
+    const newCartItems = removeItemFromCartArrayHelper(
+      cartItemsArray,
+      cartItemToRemove
+    );
+    return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
+  }
+);
 
-export const clearItemsFromCartArray = (cartItemsArray, cartItemToClear) => {
-  const newCartItems = clearItemsFromCartArrayHelper(
-    cartItemsArray,
-    cartItemToClear
-  );
-  return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
-};
+export const clearItemsFromCartArray = withMatcher(
+  (cartItemsArray, cartItemToClear) => {
+    const newCartItems = clearItemsFromCartArrayHelper(
+      cartItemsArray,
+      cartItemToClear
+    );
+    return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
+  }
+);

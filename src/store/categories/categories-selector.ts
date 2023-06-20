@@ -1,10 +1,12 @@
 import { createSelector } from "reselect";
+import { CategoriesState } from "./categories-reducer";
+import { CategoryMap } from "./categories-types";
 
 // ! these all steps are a concept called memoization. Memoization is simply avoiding unnecessary steps that are already done. means if you have alreaday evaluated result of certain function and it is present in your app or wherever you stor it then it will not re-run the whole process again but it will catch the previously held values.
 // ? Here we are doing it because we were facing unnecessary re-renders so after this solution the selectors 2 and 3 will only get fired when categoriesSLlice which we are geting from the CategoriesReducer changes or the categoriesMap value changes meaning if we are on the hats page and just logging out the user then there is no involvement of the categories reducer or categories maps only the user reducer receives the action which asks it to change the state of the current user or simply change the user. then only that user selector will be fired but not the categories selctor.
 
 // ! this here is selecting the categoriesReducer Slice in the root reducer
-const selectCategoryReducerSlice = (state) => {
+const selectCategoryReducerSlice = (state): CategoriesState => {
   // console.log("selector 1 fired");
   return state.categories;
 };
@@ -26,7 +28,7 @@ export const selectCategoriesMap = createSelector(
       const { title, items } = category;
       acc[title.toLowerCase()] = items;
       return acc;
-    }, {});
+    }, {} as CategoryMap);
   }
 );
 
